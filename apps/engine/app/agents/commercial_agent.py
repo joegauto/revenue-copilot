@@ -1,28 +1,18 @@
-"""Agente comercial IA con LangChain.
+"""Agente comercial IA (módulo de referencia).
 
-Genera respuestas comerciales basadas en:
-- Base de conocimiento del tenant (RAG)
-- Historial de conversación
-- Detección de intenciones
-- Tono configurable
-
-Reglas estrictas:
-- Máximo 300 palabras por respuesta
-- Solo información de la KB del tenant
-- Tono configurable (formal/neutral/casual)
-- Detección de intenciones para routing
+En producción, el endpoint /engine/process-message usa httpx directo
+a OpenRouter. Este módulo queda como referencia de la arquitectura LangChain
+para cuando se quiera usar localmente con LangChain instalado.
 
 Valida: Requisitos 3.1, 3.2, 3.3, 3.4, 3.7
 """
 
+# ponytail: imports de LangChain comentados para deploy sin langchain.
+# Para usar localmente: pip install langchain langchain-core langchain-openai
+
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
-
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.language_models import BaseChatModel
-from langchain_core.output_parsers import StrOutputParser
 
 
 class Intent(StrEnum):
