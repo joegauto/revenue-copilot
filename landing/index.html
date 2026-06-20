@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Copilot — Agente Comercial IA para tu Negocio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .float { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+
+    <!-- Hero -->
+    <section class="gradient-bg min-h-screen flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+        <div class="max-w-6xl mx-auto px-6 py-20 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+                        Tu vendedor IA que trabaja
+                        <span class="text-yellow-300">24/7</span>
+                    </h1>
+                    <p class="text-xl text-white/80 mt-6 leading-relaxed">
+                        Un agente comercial con inteligencia artificial que responde a tus clientes, califica leads y agenda citas. Sin descanso, sin errores.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mt-8">
+                        <a href="https://revenue-copilot-engine.onrender.com" target="_blank"
+                           class="px-8 py-4 bg-white text-indigo-700 font-bold rounded-xl text-center hover:bg-gray-100 transition shadow-lg">
+                            🚀 Ver Demo en Vivo
+                        </a>
+                        <a href="#contacto"
+                           class="px-8 py-4 border-2 border-white text-white font-bold rounded-xl text-center hover:bg-white/10 transition">
+                            💬 Quiero mi Agente
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden lg:block float">
+                    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-white/20 rounded-lg p-3 text-white text-sm max-w-[70%]">Hola, quisiera saber los precios</div>
+                            <div class="bg-indigo-400/40 rounded-lg p-3 text-white text-sm max-w-[80%] ml-auto">¡Hola! Claro, te cuento sobre nuestros planes. ¿Qué servicio te interesa?</div>
+                            <div class="bg-white/20 rounded-lg p-3 text-white text-sm max-w-[60%]">El plan premium</div>
+                            <div class="bg-indigo-400/40 rounded-lg p-3 text-white text-sm max-w-[80%] ml-auto">Perfecto. El plan premium incluye... ¿Querés agendar una demo?</div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2 text-green-300 text-xs">
+                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                            Score: 78/100 — Lead Calificado ✓
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center">¿Qué hace <span class="gradient-text">Revenue Copilot</span>?</h2>
+            <p class="text-gray-600 text-center mt-4 max-w-2xl mx-auto">Un agente comercial inteligente que se encarga de todo el proceso de ventas, desde el primer mensaje hasta la cita agendada.</p>
+
+            <div class="grid md:grid-cols-3 gap-8 mt-12">
+                <div class="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition">
+                    <div class="text-4xl mb-4">💬</div>
+                    <h3 class="text-xl font-bold">Responde 24/7</h3>
+                    <p class="text-gray-600 mt-2">Atiende a tus clientes por WhatsApp o tu web a cualquier hora. Nunca se enferma, nunca duerme.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold">Califica Leads</h3>
+                    <p class="text-gray-600 mt-2">Puntúa cada contacto del 0 al 100. Te avisa cuando uno está listo para comprar.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition">
+                    <div class="text-4xl mb-4">📅</div>
+                    <h3 class="text-xl font-bold">Agenda Citas</h3>
+                    <p class="text-gray-600 mt-2">Cuando un lead está calificado, ofrece horarios y agenda directamente en tu calendario.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition">
+                    <div class="text-4xl mb-4">🧠</div>
+                    <h3 class="text-xl font-bold">Conoce tu Negocio</h3>
+                    <p class="text-gray-600 mt-2">Se entrena con tu información: productos, precios, políticas. Solo responde lo que vos le enseñás.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition">
+                    <div class="text-4xl mb-4">🔄</div>
+                    <h3 class="text-xl font-bold">Seguimiento Auto</h3>
+                    <p class="text-gray-600 mt-2">Si un lead no responde, envía mensajes de seguimiento automáticos hasta recuperarlo.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="text-xl font-bold">Multi-Canal</h3>
+                    <p class="text-gray-600 mt-2">WhatsApp, chat web, email. Un solo agente que maneja todos tus canales de comunicación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section class="py-20 px-6 bg-gray-50">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center">¿Cómo funciona?</h2>
+            <div class="mt-12 space-y-8">
+                <div class="flex items-start gap-6">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-xl shrink-0">1</div>
+                    <div>
+                        <h3 class="text-xl font-bold">Nos contás sobre tu negocio</h3>
+                        <p class="text-gray-600 mt-1">Qué vendés, precios, horarios, preguntas frecuentes. En 30 minutos tenemos todo.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-6">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-xl shrink-0">2</div>
+                    <div>
+                        <h3 class="text-xl font-bold">Configuramos tu agente</h3>
+                        <p class="text-gray-600 mt-1">Lo entrenamos con tu info, configuramos el scoring y lo conectamos a tu WhatsApp o web.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-6">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-xl shrink-0">3</div>
+                    <div>
+                        <h3 class="text-xl font-bold">Empieza a vender solo</h3>
+                        <p class="text-gray-600 mt-1">Tu agente responde, califica y agenda. Vos solo cerrás las ventas cuando te avisa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Precio -->
+    <section class="py-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold">Inversión única</h2>
+            <p class="text-gray-600 mt-4">Sin mensualidades. Pagás una vez y es tuyo.</p>
+
+            <div class="mt-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-10 border border-indigo-100 max-w-lg mx-auto">
+                <div class="text-sm text-indigo-600 font-semibold uppercase tracking-wide">Setup Completo</div>
+                <div class="text-5xl font-extrabold mt-3">$799<span class="text-xl text-gray-400 font-normal"> USD</span></div>
+                <p class="text-gray-500 mt-2">Pago único</p>
+                <ul class="text-left mt-8 space-y-3">
+                    <li class="flex items-center gap-3"><span class="text-green-500">✓</span> Agente IA configurado con tu info</li>
+                    <li class="flex items-center gap-3"><span class="text-green-500">✓</span> Conexión a WhatsApp o Web Chat</li>
+                    <li class="flex items-center gap-3"><span class="text-green-500">✓</span> Lead scoring personalizado</li>
+                    <li class="flex items-center gap-3"><span class="text-green-500">✓</span> Dashboard de métricas</li>
+                    <li class="flex items-center gap-3"><span class="text-green-500">✓</span> Secuencias de seguimiento</li>
+                    <li class="flex items-center gap-3"><span class="text-green-500">✓</span> 30 días de soporte incluido</li>
+                </ul>
+                <a href="#contacto" class="block mt-8 px-8 py-4 gradient-bg text-white font-bold rounded-xl hover:opacity-90 transition">
+                    Quiero mi Agente →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="py-20 px-6 bg-gray-900 text-white">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold">¿Listo para automatizar tus ventas?</h2>
+            <p class="text-gray-400 mt-4">Escribinos y en 48h tenés tu agente funcionando.</p>
+
+            <div class="grid sm:grid-cols-2 gap-6 mt-12 max-w-lg mx-auto">
+                <a href="https://wa.me/595000000000?text=Hola%2C%20quiero%20info%20sobre%20Revenue%20Copilot"
+                   target="_blank"
+                   class="px-6 py-4 bg-green-600 rounded-xl font-bold hover:bg-green-700 transition text-center">
+                    📱 WhatsApp
+                </a>
+                <a href="mailto:tu@email.com?subject=Quiero%20Revenue%20Copilot"
+                   class="px-6 py-4 bg-indigo-600 rounded-xl font-bold hover:bg-indigo-700 transition text-center">
+                    ✉️ Email
+                </a>
+            </div>
+
+            <p class="text-gray-500 text-sm mt-12">Revenue Copilot — Agente Comercial IA Autónomo</p>
+        </div>
+    </section>
+
+</body>
+</html>
