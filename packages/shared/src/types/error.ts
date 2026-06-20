@@ -1,0 +1,39 @@
+/**
+ * Códigos de error y respuesta de error estándar.
+ * Validates: Requirements 1.1, 1.2
+ */
+
+export enum ErrorCode {
+  AUTH_INVALID_CREDENTIALS = 'AUTH_001',
+  AUTH_ACCOUNT_LOCKED = 'AUTH_002',
+  AUTH_TOKEN_EXPIRED = 'AUTH_003',
+  AUTH_INSUFFICIENT_PERMISSIONS = 'AUTH_004',
+  RATE_LIMIT_EXCEEDED = 'RATE_001',
+  WA_CREDENTIALS_INVALID = 'WA_001',
+  WA_RATE_LIMITED = 'WA_002',
+  WA_SEND_FAILED = 'WA_003',
+  WA_UNSUPPORTED_TYPE = 'WA_004',
+  WA_TEMPLATE_REQUIRED = 'WA_005',
+  CAL_CONNECTION_FAILED = 'CAL_001',
+  CAL_NO_AVAILABILITY = 'CAL_002',
+  CAL_MAX_RESCHEDULES = 'CAL_003',
+  CAL_EVENT_CREATION_FAILED = 'CAL_004',
+  AGENT_RESPONSE_TIMEOUT = 'AGENT_001',
+  AGENT_KNOWLEDGE_NOT_FOUND = 'AGENT_002',
+  AGENT_ESCALATION_REQUIRED = 'AGENT_003',
+  TENANT_NOT_FOUND = 'TENANT_001',
+  TENANT_DATA_ISOLATION = 'TENANT_002',
+  TENANT_CONFIG_INVALID = 'TENANT_003',
+  QUEUE_CAPACITY_EXCEEDED = 'QUEUE_001',
+  QUEUE_MESSAGE_EXPIRED = 'QUEUE_002',
+}
+
+export interface ErrorResponse {
+  success: false;
+  error: {
+    code: ErrorCode;
+    message: string;
+    details?: unknown;
+    retryAfter?: number;
+  };
+}

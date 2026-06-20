@@ -1,0 +1,22 @@
+[project]
+name = "revenue-copilot-engine"
+version = "0.1.0"
+description = "Revenue Copilot - AI Commercial Agent Engine"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "pbt: Property-based tests",
+]
+
+[tool.hypothesis]
+max_examples = 200
+deadline = 5000

@@ -1,0 +1,23 @@
+{
+  "name": "revenue-copilot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Revenue Copilot — Agente de IA autónomo SaaS multi-tenant para gestión comercial",
+  "workspaces": [
+    "apps/web",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build:web": "npm run build --workspace=apps/web",
+    "dev:engine": "cd apps/engine && uvicorn app.main:app --reload --port 8000",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}

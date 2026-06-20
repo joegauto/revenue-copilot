@@ -1,0 +1,318 @@
+// Revenue Copilot — Schema SQLite para desarrollo local
+// Copia simplificada sin tipos PostgreSQL-specific
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Tenant {
+  id                     String    @id @default(uuid())
+  name                   String
+  email                  String    @unique
+  passwordHash           String
+  plan                   String    @default("starter")
+  timezone               String    @default("UTC")
+  operatingHoursStart    Int       @default(9)
+  operatingHoursEnd      Int       @default(18)
+  operatingDays          String    @default("1,2,3,4,5")
+  communicationTone      String    @default("neutral")
+  qualificationThreshold Int       @default(60)
+  conversionAction       String    @default("notify")
+  rateLimitPerMinute     Int       @default(100)
+  onboardingCompleted    Boolean   @default(false)
+  onboardingStep         Int       @default(0)
+  isActive               Boolean   @default(true)
+  deletedAt              DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  leads                  Lead[]
+  conversations          Conversation[]
+  appointments           Appointment[]
+  knowledgeEntries       KnowledgeEntry[]
+  scoringConfig          ScoringConfig?
+  followUpSequences      FollowUpSequence[]
+  whatsappConfig         WhatsAppConfig?
+  calendarConfig         CalendarConfig?
+  users                  TenantUser[]
+  conversationTemplates  ConversationTemplate[]
+  metrics                MetricSnapshot[]
+
+  @@map("tenants")
+}
+
+model TenantUser {
+  id             String    @id @default(uuid())
+  tenantId       String
+  email          String
+  passwordHash   String
+  role           String    @default("admin")
+  isActive       Boolean   @default(true)
+  lockedUntil    DateTime?
+  failedAttempts Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, email])
+  @@map("tenant_users")
+}
+
+model Lead {
+  id                     String    @id @default(uuid())
+  tenantId               String
+  name                   String?
+  email                  String?
+  phone                  String?
+  webSessionId           String?
+  score                  Int       @default(0)
+  status                 String    @default("new")
+  segment                String?
+  preferredChannel       String?
+  avgResponseMinutes     Float?
+  totalMessages          Int       @default(0)
+  qualificationAnswers   Int       @default(0)
+  totalQualificationQs   Int       @default(0)
+  demographicMatch       Boolean   @default(false)
+  lastMessageAt          DateTime?
+  qualifiedAt            DateTime?
+  convertedAt            DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  tenant                 Tenant    @relation(fields: [tenantId], references: [id])
+  conversations          Conversation[]
+  messages               Message[]
+  appointments           Appointment[]
+  followUpExecutions     FollowUpExecution[]
+  scoreHistory           ScoreHistory[]
+
+  @@map("leads")
+}
+
+model Conversation {
+  id           String    @id @default(uuid())
+  tenantId     String
+  leadId       String
+  channel      String
+  status       String    @default("active")
+  startedAt    DateTime  @default(now())
+  lastActiveAt DateTime  @default(now())
+  closedAt     DateTime?
+  messageCount Int       @default(0)
+  resolvedByAi Boolean   @default(true)
+
+  tenant       Tenant    @relation(fields: [tenantId], references: [id])
+  lead         Lead      @relation(fields: [leadId], references: [id])
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  leadId         String
+  direction      String
+  channel        String
+  messageType    String       @default("text")
+  content        String
+  metadata       String?
+  deliveryStatus String?
+  isFollowUp     Boolean      @default(false)
+  responseTimeMs Int?
+  createdAt      DateTime     @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  lead           Lead         @relation(fields: [leadId], references: [id])
+
+  @@map("messages")
+}
+
+model ScoringConfig {
+  id                     String   @id @default(uuid())
+  tenantId               String   @unique
+  weightQualification    Int      @default(40)
+  weightEngagement       Int      @default(25)
+  weightDemographics     Int      @default(20)
+  weightResponseSpeed    Int      @default(15)
+  qualificationThreshold Int      @default(60)
+  qualificationQuestions String   @default("[]")
+  targetProfile          String   @default("{}")
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  tenant                 Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@map("scoring_configs")
+}
+
+model ScoreHistory {
+  id        String   @id @default(uuid())
+  leadId    String
+  score     Int
+  delta     Int
+  reason    String
+  createdAt DateTime @default(now())
+
+  lead      Lead     @relation(fields: [leadId], references: [id])
+
+  @@map("score_history")
+}
+
+model FollowUpSequence {
+  id                     String   @id @default(uuid())
+  tenantId               String
+  name                   String
+  segment                String   @default("")
+  triggerInactivityHours Int      @default(24)
+  maxSteps               Int      @default(3)
+  isActive               Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  tenant                 Tenant   @relation(fields: [tenantId], references: [id])
+  steps                  FollowUpStep[]
+  executions             FollowUpExecution[]
+
+  @@map("follow_up_sequences")
+}
+
+model FollowUpStep {
+  id           String           @id @default(uuid())
+  sequenceId   String
+  stepNumber   Int
+  delayHours   Int
+  templateText String
+  channel      String?
+
+  sequence     FollowUpSequence @relation(fields: [sequenceId], references: [id])
+
+  @@unique([sequenceId, stepNumber])
+  @@map("follow_up_steps")
+}
+
+model FollowUpExecution {
+  id          String           @id @default(uuid())
+  sequenceId  String
+  leadId      String
+  currentStep Int              @default(0)
+  status      String           @default("active")
+  startedAt   DateTime         @default(now())
+  nextStepAt  DateTime?
+  completedAt DateTime?
+  stoppedAt   DateTime?
+
+  sequence    FollowUpSequence @relation(fields: [sequenceId], references: [id])
+  lead        Lead             @relation(fields: [leadId], references: [id])
+
+  @@map("follow_up_executions")
+}
+
+model Appointment {
+  id                  String    @id @default(uuid())
+  tenantId            String
+  leadId              String
+  googleEventId       String?
+  startTime           DateTime
+  endTime             DateTime
+  status              String    @default("scheduled")
+  rescheduleCount     Int       @default(0)
+  conversationSummary String?
+  leadScoreAtBooking  Int
+  channelOrigin       String
+  reminder24hSent     Boolean   @default(false)
+  reminder1hSent      Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  tenant              Tenant    @relation(fields: [tenantId], references: [id])
+  lead                Lead      @relation(fields: [leadId], references: [id])
+
+  @@map("appointments")
+}
+
+model CalendarConfig {
+  id           String    @id @default(uuid())
+  tenantId     String    @unique
+  googleTokens String    @default("")
+  calendarId   String    @default("primary")
+  isConnected  Boolean   @default(false)
+  lastSyncAt   DateTime?
+
+  tenant       Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@map("calendar_configs")
+}
+
+model KnowledgeEntry {
+  id         String   @id @default(uuid())
+  tenantId   String
+  title      String
+  content    String
+  sourceType String
+  sourceUrl  String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@map("knowledge_entries")
+}
+
+model WhatsAppConfig {
+  id                 String  @id @default(uuid())
+  tenantId           String  @unique
+  phoneNumberId      String
+  accessToken        String
+  webhookVerifyToken String
+  businessAccountId  String?
+  isConnected        Boolean @default(false)
+
+  tenant             Tenant  @relation(fields: [tenantId], references: [id])
+
+  @@map("whatsapp_configs")
+}
+
+model ConversationTemplate {
+  id        String   @id @default(uuid())
+  tenantId  String
+  name      String
+  industry  String
+  flowConfig String  @default("{}")
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@map("conversation_templates")
+}
+
+model MetricSnapshot {
+  id                  String   @id @default(uuid())
+  tenantId            String
+  date                DateTime
+  totalLeads          Int      @default(0)
+  qualifiedLeads      Int      @default(0)
+  appointmentsBooked  Int      @default(0)
+  conversionsWhatsapp Int      @default(0)
+  conversionsWebchat  Int      @default(0)
+  totalLeadsWhatsapp  Int      @default(0)
+  totalLeadsWebchat   Int      @default(0)
+  avgResponseTimeMs   Int      @default(0)
+  activeConversations Int      @default(0)
+  aiResolvedCount     Int      @default(0)
+  totalConversations  Int      @default(0)
+  avgLeadScore        Float    @default(0)
+
+  tenant              Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, date])
+  @@map("metric_snapshots")
+}
