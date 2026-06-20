@@ -42,9 +42,7 @@ class ProcessMessageResponse(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
-# Configuración del LLM
-API_KEY = os.getenv("ENGINE_LLM_API_KEY", "")
-MODEL = os.getenv("ENGINE_LLM_MODEL", "google/gemini-2.0-flash-exp:free")
+# Configuración del LLM — se lee dentro de la función para que Render la inyecte
 BASE_URL = "https://openrouter.ai/api/v1"
 
 SYSTEM_PROMPT = """Eres un agente comercial virtual inteligente.
@@ -67,7 +65,10 @@ CONTEXTO DEL LEAD:
 
 async def call_llm(message: str, history: list[dict], lead_context: dict) -> str:
     """Llama al LLM via OpenRouter."""
-    if not API_KEY:
+    api_key = os.getenv("ENGINE_LLM_API_KEY", "")
+    model = os.getenv("ENGINE_LLM_MODEL", "meta-llama/llama-3.1-8b-instruct")
+
+    if not api_key:
         return "El agente IA no está configurado. Configura ENGINE_LLM_API_KEY."
 
     messages = [
@@ -88,26 +89,29 @@ async def call_llm(message: str, history: list[dict], lead_context: dict) -> str
     # Agregar mensaje actual
     messages.append({"role": "user", "content": message})
 
-    async with httpx.AsyncClient(timeout=15.0) as client:
-        response = await client.post(
-            f"{BASE_URL}/chat/completions",
-            headers={
-                "Authorization": f"Bearer {API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": MODEL,
-                "messages": messages,
-                "max_tokens": 500,
-                "temperature": 0.7,
-            },
-        )
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            response = await client.post(
+                f"{BASE_URL}/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": model,
+                    "messages": messages,
+                    "max_tokens": 500,
+                    "temperature": 0.7,
+                },
+            )
 
-        if response.status_code != 200:
-            return f"Error del LLM ({response.status_code}). Intenta de nuevo."
+            if response.status_code != 200:
+                return f"Error del LLM ({response.status_code}). Intenta de nuevo."
 
-        data = response.json()
-        return data["choices"][0]["message"]["content"]
+            data = response.json()
+            return data["choices"][0]["message"]["content"]
+    except Exception as e:
+        return f"Error de conexión con el LLM: {str(e)[:100]}"
 
 
 @router.post("/process-message", response_model=ProcessMessageResponse)
@@ -150,7 +154,7 @@ async def process_message(request: ProcessMessageRequest) -> ProcessMessageRespo
         metadata={
             "dimension_scores": score_result.dimension_scores,
             "qualified": score_result.qualified,
-            "model": MODEL,
+            "model": os.getenv("ENGINE_LLM_MODEL", "meta-llama/llama-3.1-8b-instruct"),
         },
     )
 
