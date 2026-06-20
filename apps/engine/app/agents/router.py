@@ -65,8 +65,8 @@ CONTEXTO DEL LEAD:
 
 async def call_llm(message: str, history: list[dict], lead_context: dict) -> str:
     """Llama al LLM via OpenRouter."""
-    api_key = os.getenv("ENGINE_LLM_API_KEY", "")
-    model = os.getenv("ENGINE_LLM_MODEL", "meta-llama/llama-3.1-8b-instruct")
+    api_key = os.getenv("ENGINE_LLM_API_KEY", "").strip()
+    model = os.getenv("ENGINE_LLM_MODEL", "meta-llama/llama-3.1-8b-instruct").strip()
 
     if not api_key:
         return "El agente IA no está configurado. Configura ENGINE_LLM_API_KEY."
