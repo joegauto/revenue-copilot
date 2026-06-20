@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: revenue-copilot-engine
+    runtime: python
+    rootDir: apps/engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: ENGINE_LLM_API_KEY
+        sync: false
+      - key: ENGINE_LLM_MODEL
+        value: meta-llama/llama-3.1-8b-instruct
+      - key: ENGINE_LLM_PROVIDER
+        value: openrouter
+      - key: ENGINE_ENVIRONMENT
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.11.9
